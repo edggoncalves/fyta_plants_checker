@@ -128,3 +128,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 /fyta.conf
+/credentials.json
+/token.pickle

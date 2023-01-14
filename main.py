@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import logging
 import requests
 import config
 
@@ -8,11 +7,11 @@ import config
 URL = 'https://web.fyta.de/api/user-plant'
 
 
-def main():
+def main() -> list | str:
     # Get the auth token
     conf = config.load_conf()
     try:
-        token = conf['auth']['token']
+        token = conf['fyta_auth']['token']
     except KeyError:
         return 'No token detected.'
 
