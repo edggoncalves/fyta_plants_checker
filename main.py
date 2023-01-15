@@ -1,33 +1,33 @@
 #!/usr/bin/env python3
 
-import requests
+from googleapiclient.discovery import Resource
+import check_plants
 import config
-
-# TOKEN = getenv('FYTA_TOKEN')
-URL = 'https://web.fyta.de/api/user-plant'
+from notify import send_mail
 
 
-def main() -> list | str:
-    # Get the auth token
+def main() -> str | Resource:
+    thirsty = list()
     conf = config.load_conf()
-    try:
-        token = conf['fyta_auth']['token']
-    except KeyError:
-        return 'No token detected.'
+    plants = check_plants.check()
+    for plant in plants:
+        if plant['moisture_status'] < 3:
+            thirsty.append(plant)
 
-    # Get plants
-    headers = {'Authorization': f'Bearer {token}'}
-    plants_request = requests.get(
-        url=URL,
-        headers=headers
-    )
-    if plants_request.ok is not True:
-        return f'Error {plants_request.status_code} contacting the api:\n' \
-               f'{plants_request.text}'
+    if len(thirsty) > 0:
+        if len(thirsty) == 1:
+            thirsty_plants = thirsty[0]['nickname']
+        else:
+            thirsty_plants = ', '.join([plant['nickname'] for plant in thirsty])
 
-    plants_list = plants_request.json()['plants']
+        return send_mail(
+            destination=conf['email_config']['to'],
+            subject='Your plants need attention!',
+            text=f'The following plant(s) could use a drink:\n'
+                 f'{thirsty_plants}'
+        )
 
-    return plants_list
+    return 'No plants need watering.'
 
 
 if __name__ == '__main__':

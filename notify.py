@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import config
 import pickle
 from pathlib import Path
@@ -10,7 +8,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 import googleapiclient.discovery
 # for encoding/decoding messages in base64
-from base64 import urlsafe_b64decode, urlsafe_b64encode
+from base64 import urlsafe_b64encode
 
 URL = ['https://mail.google.com/']
 TOKEN = 'token.pickle'
@@ -40,14 +38,17 @@ def authenticate() -> googleapiclient.discovery.Resource:
     return googleapiclient.discovery.build('gmail', 'v1', credentials=creds)
 
 
-def send_mail(destination, obj, body):
+def send_mail(
+        destination: str, subject: str, text: str
+) -> googleapiclient.discovery.Resource:
+
     conf = config.load_conf()
     service = authenticate()
 
-    message = MIMEText(body)
+    message = MIMEText(text)
     message['to'] = destination
     message['from'] = conf['email_config']['email']
-    message['subject'] = obj
+    message['subject'] = subject
 
     enc_message = {'raw': urlsafe_b64encode(message.as_bytes()).decode()}
 
