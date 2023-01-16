@@ -1,14 +1,11 @@
 #!/usr/bin/env python3
 
-from googleapiclient.discovery import Resource
 import check_plants
-import config
 from notify import send_mail
 
 
 def main() -> str | dict:
     thirsty = list()
-    conf = config.load_conf()
     plants = check_plants.check()
     for plant in plants:
         if plant['moisture_status'] < 3:

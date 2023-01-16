@@ -8,9 +8,6 @@ packages = [{include = "fyta_plants_checker"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
-google-auth-oauthlib = "^0.8.0"
-google = "^3.0.0"
-google-api-python-client = "^2.72.0"
 
 
 [build-system]
