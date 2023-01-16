@@ -6,7 +6,7 @@ import config
 from notify import send_mail
 
 
-def main() -> str | Resource:
+def main() -> str | dict:
     thirsty = list()
     conf = config.load_conf()
     plants = check_plants.check()
@@ -20,12 +20,9 @@ def main() -> str | Resource:
         else:
             thirsty_plants = ', '.join([plant['nickname'] for plant in thirsty])
 
-        return send_mail(
-            destination=conf['email_config']['to'],
-            subject='Your plants need attention!',
-            text=f'The following plant(s) could use a drink:\n'
-                 f'{thirsty_plants}'
-        )
+        body = f'The following plant(s) could use a drink:\n{thirsty_plants}'
+
+        return send_mail(body)
 
     return 'No plants need watering.'
 
