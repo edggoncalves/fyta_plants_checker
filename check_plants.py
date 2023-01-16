@@ -1,7 +1,6 @@
 import requests
 import config
 
-# TOKEN = getenv('FYTA_TOKEN')
 URL = 'https://web.fyta.de/api/user-plant'
 
 

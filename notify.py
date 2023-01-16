@@ -1,17 +1,14 @@
-#!/usr/bin/env python3
-
 import config
 import smtplib
 from configparser import ConfigParser
 from email.message import EmailMessage
 
-URL = ['https://mail.google.com/']
-TOKEN = 'token.pickle'
-CREDS_JSON = 'credentials.json'
+URL = 'smtp.gmail.com'
+PORT = 587
 
 
 def start_session(conf: ConfigParser) -> smtplib.SMTP:
-    session = smtplib.SMTP('smtp.gmail.com', 587)
+    session = smtplib.SMTP(URL, PORT)
     session.starttls()
     user = conf['email_config']['email']
     password = conf['email_config']['password']
