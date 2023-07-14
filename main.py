@@ -1,30 +1,29 @@
 #!/usr/bin/env python3
 
 import check_plants
+import data_check
+import gen_message
+import logging
 from notify import send_mail
+from datetime import datetime
 
 
-def main() -> str | dict:
+# Log to a file using logging
+logging.basicConfig(filename="log.txt", level=logging.DEBUG)
+
+
+def main() -> dict | None:
     plants = check_plants.check()
+    statuses = data_check.check_data(plants)
 
-    thirsty = [
-        plant for plant in plants
-        if plant.get('moisture_status', 0) < 3
-        and plant.get("sensor", None) is not None
-    ]
-
-    if len(thirsty) > 0:
-        if len(thirsty) == 1:
-            thirsty_plants = thirsty[0].get('nickname')
-        else:
-            thirsty_plants = ', '.join([plant.get('nickname') for plant in thirsty])
-
-        body = f'The following plant(s) could use a drink:\n{thirsty_plants}'
-
+    if statuses["attention_needed"] is True:
+        body = gen_message.generate(statuses)
+        # Log mail sent with current date
+        logging.info(f"{datetime.now()}: Mail sent")
         return send_mail(body)
 
-    return 'No plants need watering.'
+    return logging.info(f"{datetime.now()}: No mail sent")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
