@@ -27,10 +27,8 @@ def check_data(plants):
         if plant.get("sensor", None) is not None and plant.get("sensor").get("is_battery_low", True) is True
     ]
 
-    statuses = [thirsty, dark, hungry]
-
     # Flag if any of the lists are not empty.
-    for status in statuses:
+    for status in [thirsty, dark, hungry, low_battery]:
         if len(status) > 0:
             attention_needed = True
 
