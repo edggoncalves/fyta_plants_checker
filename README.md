@@ -1,4 +1,4 @@
-# fyta_plants_checker
+# Fyta Plants Checker
 A simple program that checks on your plants using the Fyta API.
 
 ### Requirements
