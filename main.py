@@ -4,12 +4,15 @@ import check_plants
 import data_check
 import gen_message
 import logging
-from os import path
+from os import path, mkdir, getcwd
 from notify import send_mail
 from datetime import datetime
 
-# Find local path
-local_path = path.dirname(path.abspath(__file__))
+# Get current working directory
+local_path = getcwd()
+# Create logs folder if it doesn't exist
+if not path.exists(f"{local_path}/logs"):
+    mkdir(f"{local_path}/logs")
 # Log to a file using logging
 logging.basicConfig(filename=f"{local_path}/logs/log.txt", level=logging.DEBUG)
 
