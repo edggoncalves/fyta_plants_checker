@@ -8,6 +8,7 @@ def generate(statuses: dict) -> str:
     thirsty_plants = str()
     dark_plants = str()
     hungry_plants = str()
+    low_battery_plants = str()
 
     if len(statuses["thirsty"]) > 0:
         thirsty_plants = ", ".join(
@@ -27,6 +28,12 @@ def generate(statuses: dict) -> str:
         )
         hungry_plants = f'\t{STATUS["hungry"]}{hungry_plants}\n\n'
 
-    body = "".join((thirsty_plants, dark_plants, hungry_plants))
+    if len(statuses["low_battery"]) > 0:
+        low_battery_plants = ", ".join(
+            [plant.get("nickname") for plant in statuses["low_battery"]]
+        )
+        low_battery_plants = f'\t{STATUS["low_battery"]}{low_battery_plants}\n\n'
+
+    body = "".join((thirsty_plants, dark_plants, hungry_plants, low_battery_plants))
 
     return body

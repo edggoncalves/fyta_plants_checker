@@ -20,6 +20,13 @@ def check_data(plants):
         if plant.get("salinity_status", 0) < 3 and plant.get("sensor", None) is not None
     ]
 
+    # Check sensor battery
+    low_battery = [
+        plant
+        for plant in plants
+        if plant.get("sensor", None) is not None and plant.get("sensor").get("is_battery_low", True) is True
+    ]
+
     statuses = [thirsty, dark, hungry]
 
     # Flag if any of the lists are not empty.
@@ -31,5 +38,6 @@ def check_data(plants):
         "hungry": hungry,
         "dark": dark,
         "thirsty": thirsty,
+        "low_battery": low_battery,
         "attention_needed": attention_needed,
     }
